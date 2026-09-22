@@ -10,3 +10,11 @@ public class IndexModel : PageModel
 
     }
 }
+     public class Character
+    {
+        public string namn { get; set; }
+        public string yrke { get; set; }
+        public List<string> utrustning { get; set; }
+        public string bakgrundshistoria { get; set; }
+    }
+
