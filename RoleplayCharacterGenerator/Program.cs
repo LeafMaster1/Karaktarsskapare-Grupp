@@ -1,10 +1,8 @@
 using DotNetEnv;
-using Azure;
 using OpenAI;
 using OpenAI.Images;
-using System;
-using System.IO;
 using System.ClientModel;
+using RoleplayCharacterGenerator.Services;
 
 #pragma warning disable OPENAI001
 
@@ -17,6 +15,16 @@ string apiKey = Environment.GetEnvironmentVariable("AZURE_OPENAI_KEY")
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+
+// Registrera ImageClient och bildtjänsten för DI.
+// Metoden GenerateCharacterImageAsync(string) tar sedan hand om
+// prompt-bygge + LLM-anrop.
+builder.Services.AddSingleton(_ => new ImageClient(
+    credential: new ApiKeyCredential(apiKey),
+    model: deploymentName,
+    options: new OpenAIClientOptions { Endpoint = new Uri(endpoint) }
+));
+builder.Services.AddScoped<ICharacterImageService, CharacterImageService>();
 
 var app = builder.Build();
 
@@ -38,25 +46,10 @@ app.MapStaticAssets();
 app.MapRazorPages()
    .WithStaticAssets();
 
-ImageClient client = new(
-    credential: new ApiKeyCredential(apiKey),
-    model: deploymentName,
-    options: new OpenAIClientOptions()
-    {
-        Endpoint = new($"{endpoint}"),
-    }
-);
-
-string prompt = "A cute baby polar bear";
-
-ImageGenerationOptions options = new()
-{   
-    Size = GeneratedImageSize.W1024xH1024,
-};
-
-GeneratedImage image = client.GenerateImage(prompt, options);
-BinaryData bytes = image.ImageBytes;
-
-File.WriteAllBytes("output.png", bytes.ToArray());
+// Exempel på användning av den nya metoden (avkommentera för att testa lokalt):
+// using var scope = app.Services.CreateScope();
+// var imageService = scope.ServiceProvider.GetRequiredService<ICharacterImageService>();
+// byte[] png = await imageService.GenerateCharacterImageAsync("en kvinnlig alv med silverhår, jägare, läderarmor och båge, ärr över kinden");
+// await File.WriteAllBytesAsync("output.png", png);
 
 app.Run();
