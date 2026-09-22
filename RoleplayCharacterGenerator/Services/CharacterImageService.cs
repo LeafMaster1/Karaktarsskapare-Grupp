@@ -50,7 +50,7 @@ public class CharacterImageService : ICharacterImageService
     {
         Size = GeneratedImageSize.W1024xH1024,
         Quality = GeneratedImageQuality.High,
-        Style = GeneratedImageStyle.Vivid,
+        //Style = GeneratedImageStyle.Vivid,
     };
 
     public CharacterImageService(ImageClient imageClient)
