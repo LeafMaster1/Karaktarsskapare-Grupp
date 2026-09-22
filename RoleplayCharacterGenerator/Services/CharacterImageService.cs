@@ -32,6 +32,7 @@ public class CharacterImageService : ICharacterImageService
         Men befintliga attacker som matchar typen. Bilden får inte innehålla copyrightat innehåll, utan du ska tweaka 
         innehåll som kan liknas med Pokemon-franchisen till snarlika element.
         Alla skapade 'Chrillemons' ska sluta på "-ennari" och ha italienska element.
+        Här kommer användarens beskrivning av spelkortet:
         """;
 
     private const string StyleSuffix =
