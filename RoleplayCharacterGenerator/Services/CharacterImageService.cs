@@ -35,12 +35,17 @@ public class CharacterImageService : ICharacterImageService
         Här kommer användarens beskrivning av spelkortet:
         """;
 
+
     private const string StyleSuffix =
         """
-        neutral soft gradient background, no text, no watermark, no logo, no extra characters,
-        full sharp detail, 8k, ultra-detailed, professional character concept art
+        single centered Chrillemon creature, full body, dynamic battle-ready pose, centered composition,
+        semi-realistic anime creature illustration, original design inspired by Pokemon TCG but not copying any existing Pokemon,
+        vibrant type-coherent color palette, detailed textured skin/fur/scales, expressive large eyes, clean readable silhouette,
+        subtle Italian-inspired ornamental details, soft studio lighting, clean white to pastel gradient background,
+        no text, no watermark, no logo, no card frame, no border, no UI, no extra creatures, no human, no trainer, no Pokeball,
+        sharp focus, ultra-detailed, 8k, professional trading card game creature concept art, cel-shading with subtle realism
         """;
-
+    
     private static readonly ImageGenerationOptions DefaultOptions = new()
     {
         Size = GeneratedImageSize.W1024xH1024,
