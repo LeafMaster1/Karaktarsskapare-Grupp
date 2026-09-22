@@ -49,7 +49,7 @@ public class CharacterImageService : ICharacterImageService
     private static readonly ImageGenerationOptions DefaultOptions = new()
     {
         Size = GeneratedImageSize.W1024xH1024,
-        Quality = GeneratedImageQuality.High,
+        //Quality = GeneratedImageQuality.High,
         //Style = GeneratedImageStyle.Vivid,
     };
 
