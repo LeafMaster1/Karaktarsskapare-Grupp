@@ -1,225 +1,208 @@
 @page
 @model IndexModel
 @{
-    ViewData["Title"] = "SLAY & ROLLSPEL - Edvin Törnblom Pride Edition ✨🌈";
-
-    // Säker reflektion så att koden bygger oavsett hur gruppen namnger sin egenskap i IndexModel
-    dynamic? serverChar = null;
-    var charProp = Model.GetType().GetProperty("GeneratedCharacter") ?? Model.GetType().GetProperty("Character");
-    if (charProp != null)
-    {
-        serverChar = charProp.GetValue(Model);
-    }
-    if (serverChar == null && ViewData["Character"] != null)
-    {
-        serverChar = ViewData["Character"];
-    }
-
-    var errorMsgProp = Model.GetType().GetProperty("ErrorMessage");
-    string? errorMessage = errorMsgProp?.GetValue(Model) as string ?? ViewData["ErrorMessage"] as string;
+    ViewData["Title"] = "CHRILLEMON 🇮🇹 GENERATORE — Mamma Mia Edition";
 }
 
-<div class="container py-4">
+<div class="chrillemon-page py-3">
 
-    <!-- 🪩 TOPP-BAR: EDVIN TÖRNBLOM VIBE TICKER & LSD-LÄGE (Döljs vid utskrift) -->
-    <div class="no-print d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
-        <div class="edvin-ticker">
-            <span class="fs-5">💅</span>
-            <span id="edvinQuoteText">”MÄNNISKA, JAG DÖÖÖÖR FÖR DEN HÄR KARAKTÄREN!” ✨</span>
+    <div id="pizzaLoader" class="pizza-loader" style="display:none;" aria-live="polite" aria-busy="true">
+        <div class="pizza-loader-content">
+            <div class="pizza-spinner">🍕</div>
+            <div class="bipidi-text" aria-label="bi pi di ba pi di bo">
+                <span>b</span><span>i</span><span>&nbsp;</span><span>p</span><span>i</span><span>&nbsp;</span><span>d</span><span>i</span><span>&nbsp;</span><span>b</span><span>a</span><span>&nbsp;</span><span>p</span><span>i</span><span>&nbsp;</span><span>d</span><span>i</span><span>&nbsp;</span><span>b</span><span>o</span>
+            </div>
+            <div class="loader-sub">Nonna snurrar degen… 🤌✨</div>
+            <div class="loader-hint small">Det tar 10-20 sek — LLM bakar din Chrillemon i vedugnen</div>
         </div>
+    </div>
 
-        <div class="trip-toggle-bar">
-            <button type="button" class="btn btn-sm btn-outline-light rounded-pill px-3 shadow-sm" onclick="toggleLsdMode()">
-                <span id="lsdStatusBadge">🌈 Klicka för HYPER-LSD LÄGE 🦄</span>
+    <div class="no-print d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+        <div class="italian-ticker">
+            <span class="fs-5">🤌</span>
+            <span id="nonnaQuoteText">“MAMMA MIA! Vilken Chrillemon, perfetto!” 🍝✨</span>
+        </div>
+        <div class="d-flex gap-2">
+            <button type="button" class="btn btn-sm btn-light rounded-pill px-3 fw-bold shadow-sm" onclick="togglePastaMode()">
+                <span id="pastaBadge">🍝 PASTA-MODE: OFF</span>
             </button>
-            <button type="button" class="btn btn-sm btn-outline-warning rounded-pill px-3 shadow-sm ms-1" onclick="launchRainbowConfetti()">
-                🎉 Fyrverkeri & Konfetti!
+            <button type="button" class="btn btn-sm btn-warning rounded-pill px-3 fw-bold shadow-sm" onclick="launchPastaConfetti()">
+                🎉 MAMMA MIA CONFETTI!
             </button>
         </div>
     </div>
 
-    <!-- 🌟 HUVUDRUBRIK (Döljs vid utskrift) -->
-    <div class="no-print text-center mb-4">
-        <h1 class="display-3 rainbow-headline mb-1">👑 SLAY & SKAPA KARAKTÄR 🦄</h1>
-        <p class="glow-subtext fw-semibold">
-            Världens fetaste rollspelsgenerator! Skriv din idé, få ut ett komplett, fabulöst karaktärsblad.
+    <div class="tricolore-bar mb-4"></div>
+
+    <div class="no-print text-center mb-4 position-relative">
+        <div class="floating-pasta" aria-hidden="true">🍝 🍕 🫒 🛵 🏛️ 🍝 🍅</div>
+        <h1 class="chrillemon-title mb-1">
+            <span class="title-italian-green">CHRILLE</span><span class="title-italian-white">MON</span><span class="title-italian-red"> GENERATORE</span>
+            <span class="d-block fs-5 mt-1 fw-bold" style="letter-spacing: 4px; color:#ffd700; text-shadow: 0 0 12px #ff0000;">🇮🇹 MAMMA MIA EDITION 🇮🇹</span>
+        </h1>
+        <p class="chrillemon-subtitle mt-2">
+            Skapa din egen <strong>Chrillemon</strong> — Pokemon fast på italienska, capisce? <br/>
+            <span class="badge bg-success">FUOCO</span> <span class="badge bg-primary">ACQUA</span> <span class="badge bg-success" style="background:#4caf50!important">ERBA</span> <span class="badge bg-warning text-dark">ELETTRICO</span> <span class="badge" style="background:#8B4513">TERRA</span> — tutti frutti!
         </p>
+        <p class="small fst-italic" style="color:#ffe8b3">Alla Chrillemons <strong>måste</strong> sluta på <code>-ennari</code> & ha italiensk flärd — annars blir Nonna rasande! 🤌🍝</p>
     </div>
 
-    <!-- 🚨 FELMEDDELANDE OM DET FINNS -->
-    @if (!string.IsNullOrEmpty(errorMessage))
+    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
     {
-        <div class="alert alert-danger shadow border-0 rounded-4 no-print mb-4">
-            <strong>Hoppsan darling!</strong> @errorMessage
+        <div class="alert alert-danger border-0 shadow rounded-4 no-print mb-4" style="background: linear-gradient(90deg,#ff3b30,#ff9500); color:white; font-weight:800;">
+            <span class="fs-4">🍕</span> @Model.ErrorMessage
         </div>
     }
 
-    <!-- 📝 INMATNINGSRUTA / FORMULÄR (Döljs vid utskrift) -->
-    <div class="no-print pride-card p-4 mb-5">
-        <form method="post" id="characterForm">
-            <div class="mb-3">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <label for="userPromptInput" class="form-label fw-bold fs-5 text-light mb-0">
-                        ✨ Vad är din karaktärsvision, darling?
+    <div class="no-print chrillemon-form-card p-4 mb-5">
+        <form method="post" asp-page-handler="Generate" id="chrillemonForm">
+            @Html.AntiForgeryToken()
+            <div class="row g-3">
+                <div class="col-md-5">
+                    <label for="chrillemonNamn" class="form-label fw-black text-uppercase" style="color:#00a651; letter-spacing:1px;">
+                        🇮🇹 1. Nome della Chrillemon <span class="text-danger">*</span>
                     </label>
-                    <span class="badge bg-warning text-dark px-2 py-1 rounded-pill">Ankeborg &bull; Fantasy &bull; Cyberpunk &bull; Pride</span>
+                    <div class="input-group input-group-lg">
+                        <span class="input-group-text" style="background:#008C45; color:white; font-weight:900; border:none;">🤌</span>
+                        <input id="chrillemonNamn" name="ChrillemonNamn" value="@Model.ChrillemonNamn" class="form-control chrillemon-input" placeholder="t.ex. Pizzalio / Inferno" required maxlength="40" />
+                        <span class="input-group-text" style="background:#CD212A; color:white; font-weight:900; border:none;">ennari</span>
+                    </div>
+                    <div class="form-text" style="color:#ffe8b3">Skriv utan ändelse — vi lägger till <strong>-ennari</strong> automatiskt! ✨</div>
                 </div>
-                <textarea id="userPromptInput" name="UserPrompt" class="form-control pride-textarea p-3" rows="3"
-                          placeholder="Exempel: Jag vill ha en äventyrlig och nyfiken anka som ofta hamnar i trubbel och gärna ger sig ut på skattjakter."></textarea>
+                <div class="col-md-7">
+                    <label for="chrillemonBeskrivning" class="form-label fw-black text-uppercase" style="color:#CD212A; letter-spacing:1px;">
+                        🍝 2. Descrizione — typ, attacker & vibe <span class="text-danger">*</span>
+                    </label>
+                    <textarea id="chrillemonBeskrivning" name="ChrillemonBeskrivning" class="form-control chrillemon-textarea p-3" rows="3" placeholder="Ex: Eld-typ, ser ut som en liten Vespa-leopard med pepperoni-fläckar, attacker: 'Espresso Shot' och 'Mamma's Slap' — snabb och kryddig!" required>@Model.ChrillemonBeskrivning</textarea>
+                </div>
             </div>
 
-            <!-- FÖRSLAGS-PRESETS (High-energy Edvin & Duckburg vibes) -->
-            <div class="mb-4">
-                <div class="small text-uppercase fw-bold text-info mb-2">⚡ Snabb-inspo (klicka för att fylla i):</div>
+            <div class="mt-4">
+                <div class="small fw-black text-uppercase mb-2" style="color:#ffd700; letter-spacing:1px;">⚡ PRESTO! Klicka för snabb-fyllning — vibekodad inspo:</div>
                 <div class="d-flex flex-wrap gap-2">
-                    <button type="button" class="btn-preset" 
-                            onclick="setPreset('Jag vill ha en äventyrlig och nyfiken anka som ofta hamnar i trubbel och gärna ger sig ut på skattjakter.')">
-                        🦆 Äventyrlig anka (Uppgiften)
+                    <button type="button" class="btn-preset-italian" onclick="fillChrillemon('Pesto','Gräs-typ, liten basilika-gecko med mozzarella-mage, doftar som Liguriens kust, attacker: Foglia Tagliente & Pesto Slap, lugn men farlig')">
+                        🌿 Pestennari <small>erba</small>
                     </button>
-                    <button type="button" class="btn-preset" 
-                            onclick="setPreset('En glamourös glitter-anka från Ankeborg med fjäderboa och champagne som letar efter Joakim von Ankas hemliga diamant-diadem.')">
-                        💎 Glitter-Diva från Ankeborg
+                    <button type="button" class="btn-preset-italian" onclick="fillChrillemon('Vespario','Elektrisk-typ, Vespa-inspirerad geting med krom-vingar som låter VROOOM, attacker: Spark Plug & Tuono Scossa, blixtsnabb i Rom-trafiken')">
+                        🛵 Vespariennari <small>elettro</small>
                     </button>
-                    <button type="button" class="btn-preset" 
-                            onclick="setPreset('En bimbo-paladin med platina-peruk och enhörningsrustning som kastar glitter-smite och sprider villkorslös kärlek.')">
-                        🦄 Bimbo-Paladin & Enhörning
+                    <button type="button" class="btn-preset-italian" onclick="fillChrillemon('Gondolio','Vatten-typ, gondol-groda med gondol-hatt och Venedig-ränder, attacker: Aqua Spruzzo & Canale Wave, glider fram i kanalerna')">
+                        💧 Gondolennari <small>acqua</small>
                     </button>
-                    <button type="button" class="btn-preset" 
-                            onclick="setPreset('En techno-shaman med neon-tatueringar och platåstövlar som förvandlar all ondska till pulserande disco-bas.')">
-                        🪩 Techno-Shaman från Pride
+                    <button type="button" class="btn-preset-italian" onclick="fillChrillemon('Inferno','Eld-typ, vulkan-kat med Etna-rök ur öronen, pizza-mönster på pälsen, attacker: Espresso Inferno & Pepperoncino Burn, het som en vedugn i Napoli')">
+                        🔥 Infernoennari <small>fuoco</small>
+                    </button>
+                    <button type="button" class="btn-preset-italian" onclick="fillChrillemon('Colosso','Sten-typ, Colosseum-sköldpadda med marmor-pelare på ryggen, attacker: Marmo Smash & Gladiatore Roar, tung som historia')">
+                        🏛️ Colossennari <small>roccia</small>
+                    </button>
+                    <button type="button" class="btn-preset-italian" onclick="fillChrillemon('Nonnano','Psykisk-typ, gammal vis nonna-katt med glasögon och förkläde, attacker: Cucchiaio Wood & Mamma’s Guilt, ser allt, vet allt')">
+                        👵 Nonnennari <small>psico</small>
                     </button>
                 </div>
             </div>
 
-            <!-- KNAPPAR FÖR ATT SKAPA / TESTA -->
-            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 pt-2 border-top border-secondary border-opacity-25">
-                <button type="button" class="btn btn-outline-info rounded-pill px-3 py-2 fw-semibold" onclick="triggerDemoCharacter()">
-                    🧪 Testa direkt i Frontend (Live-demo)
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mt-4 pt-3 border-top" style="border-color: rgba(255,255,255,0.2)!important">
+                <div class="small" style="color:#ffe8b3">💡 Tips: Ju mer italiensk detalj (mat, stad, dialekt) desto bättre bild från AI:n!</div>
+                <button type="submit" id="generateBtn" class="btn-genera">
+                    <span id="btnText">🤌 GENERA CHRILLEMON! 🇮🇹</span>
+                    <span id="btnSpinner" class="spinner-border spinner-border-sm ms-2" style="display:none;"></span>
                 </button>
-                <div class="d-flex gap-2">
-                    <button type="submit" class="btn-slay fs-5" onclick="launchRainbowConfetti()">
-                        ✨ SLAY & SKAPA KARAKTÄR 🌈
-                    </button>
-                </div>
             </div>
         </form>
     </div>
 
-    <!-- =========================================================
-         KARAKTÄRSBLADET (CHARACTER SHEET) - VISAS PÅ SKÄRM & UTSKRIFT
-         ========================================================= -->
-    <div id="characterSheetSection" class="character-sheet card border-0 mb-5" style="display: @(serverChar != null ? "block" : "none");">
-        
-        <!-- HEADER PÅ BLADET -->
-        <div class="character-header d-flex justify-content-between align-items-center flex-wrap gap-3">
-            <div>
-                <span class="small text-uppercase text-warning fw-bold d-block mb-1">OFFICIELLT KARAKTÄRSBLAD</span>
-                <h2 id="charNameDisplay" class="character-name mb-0">Kalle 'Disco-Fjäder' Anka</h2>
-                <div class="mt-2">
-                    <span id="charRoleDisplay" class="character-role-badge">Äventyrlig Skattjägar-Diva</span>
+    @if (Model.HasResult)
+    {
+        <div id="resultCard" class="chrillemon-result-card mb-5">
+            <div class="result-header d-flex justify-content-between align-items-center flex-wrap gap-3">
+                <div>
+                    <div class="small fw-bold text-uppercase" style="color:#ffd700; letter-spacing:2px;">✨ IL TUO CHRILLEMON È PRONTO ✨</div>
+                    <h2 class="result-name mb-0">@Model.GeneratedName</h2>
+                    <div class="mt-1 small fst-italic" style="color:#ffe8b3">"@Model.ChrillemonBeskrivning"</div>
+                </div>
+                <div class="d-flex gap-2 no-print">
+                    <button type="button" class="btn btn-light rounded-pill px-3 fw-bold" onclick="window.print()">🖨️ Stampa Carta</button>
+                    <a href="/" class="btn btn-outline-light rounded-pill px-3 fw-bold">🔄 Nuovo</a>
                 </div>
             </div>
 
-            <!-- UTSKRIFTSKNAPP (Döljs i utskrift) -->
-            <div class="no-print">
-                <button type="button" class="btn btn-light rounded-pill px-4 py-2 fw-bold shadow-sm" onclick="window.print()">
-                    🖨️ Skriv ut / Spara PDF
-                </button>
+            <div class="card-body p-4 p-md-5">
+                <div class="row g-4">
+                    <div class="col-lg-6 text-center">
+                        <div class="chrillemon-img-frame">
+                            <img id="generatedImg" src="@Model.GeneratedImageBase64" alt="@Model.GeneratedName" class="chrillemon-img" />
+                        </div>
+                        <div class="mt-3">
+                            <span class="badge rounded-pill" style="background:#008C45;">🇮🇹 100% Original</span>
+                            <span class="badge rounded-pill" style="background:#CD212A;">No copyright — solo Chrillemon!</span>
+                        </div>
+                        <div class="small mt-2" style="color:#ffe8b3">Genererad via <strong>Azure gpt-image-1.5</strong> med stilprompt 🤌</div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="info-box mb-3">
+                            <h5 class="fw-black" style="color:#008C45;">📛 Nome</h5>
+                            <p class="fs-4 fw-bold mb-0" style="color:#1a1a1a; font-family: 'Georgia', serif; font-style: italic;">@Model.GeneratedName</p>
+                            <small class="text-muted">slutar alltid på -ennari — perfekt italiensk!</small>
+                        </div>
+                        <div class="info-box mb-3">
+                            <h5 class="fw-black" style="color:#CD212A;">📜 Descrizione</h5>
+                            <p style="white-space: pre-line; color:#333;" class="mb-0">@Model.ChrillemonBeskrivning</p>
+                        </div>
+                        <div class="info-box" style="background: #fff8e1; border-color: #ffd700;">
+                            <h5 class="fw-black" style="color:#8B4513;">🍝 La Storia — Nonnas visdom</h5>
+                            <p class="small fst-italic mb-0" style="color:#5d4037;">"Questo Chrillemon è nato nelle cucina di Nonna i Toscana — impastato con amore, kryddat med kaos och bakat i vedugn. Tratta den väl, annars kommer Nonnas slev! 🥄"</p>
+                        </div>
+
+                        @if (!string.IsNullOrEmpty(Model.GeneratedPromptDebug))
+                        {
+                            <details class="mt-3">
+                                <summary class="small fw-bold" style="cursor:pointer; color:#008C45;">🔍 Visa full prompt som skickades till AI:n</summary>
+                                <pre class="mt-2 p-3 rounded" style="background:#1a1a1a; color:#ffe8b3; font-size: 0.75rem; white-space: pre-wrap; max-height: 220px; overflow:auto;">@Model.GeneratedPromptDebug</pre>
+                            </details>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-footer text-center small" style="background: linear-gradient(90deg,#008C45,#fff,#CD212A); color:#1a1a1a; font-weight:800; letter-spacing:1px;">
+                🇮🇹 CHRILLEMON™ — Tutti i diritti riservati alla Nonna &bull; Stampami e spela! 🃏
             </div>
         </div>
 
-        <!-- INNEHÅLL I KARAKTÄRSBLADET -->
-        <div class="card-body p-4 p-md-5">
-            <div class="row g-4">
-
-                <!-- VÄNSTER KOLUMN: PORTRÄTT -->
-                <div class="col-lg-4 text-center">
-                    <div class="portrait-container mb-3">
-                        <img id="charPortraitImg" src="" alt="Karaktärsporträtt" class="portrait-img" style="display: none;" />
-                        <div id="charPortraitPlaceholder" class="portrait-placeholder">
-                            <div class="display-1 mb-2">🪩</div>
-                            <h5 class="fw-bold text-light mb-1">GLAMOUR-PORTRÄTT</h5>
-                            <p class="small text-muted mb-0">Konstverket genereras via Azure AI / DALL-E</p>
-                        </div>
-                    </div>
-                    <div class="no-print small text-muted fst-italic">
-                        Tips: Porträttet anpassas automatiskt för utskrift!
-                    </div>
-                </div>
-
-                <!-- HÖGER KOLUMN: HISTORIA, FÄRDIGHETER & UTRUSTNING -->
-                <div class="col-lg-8">
-                    
-                    <!-- 📜 BAKGRUNDSHISTORIA -->
-                    <div class="mb-4">
-                        <h4 class="fw-bold text-warning border-bottom border-warning border-opacity-50 pb-2 mb-3">
-                            📜 Bakgrundshistoria & Lore
-                        </h4>
-                        <div class="lore-box">
-                            <div class="lore-quote">”Det handlar inte bara om att överleva – det handlar om att göra entré!”</div>
-                            <p id="charLoreDisplay" style="white-space: pre-line;" class="mb-0">
-                                Kalle har tröttnat på att ständigt jaga 25 öre i timmen hos Farbror Joakim. Efter att ha ramlat in i en hemlig pop-up-klubb under Ankeborgs Pridefestival insåg han sitt sanna kall: Han är inte bara en sjöman – han är världens mest fabulösa äventyrare!
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- FÄRDIGHETER & UTRUSTNING SIDA VID SIDA -->
-                    <div class="row g-4">
-                        
-                        <!-- ⚡ FÄRDIGHETER (SKILLS) -->
-                        <div class="col-md-6">
-                            <h5 class="fw-bold text-info border-bottom border-info border-opacity-50 pb-2 mb-3">
-                                ⚡ Färdigheter & Vibe-Check
-                            </h5>
-                            <div id="charSkillsList" class="d-flex flex-wrap gap-2">
-                                <span class="skill-pill">⚡ Dramatisk Vrede</span>
-                                <span class="skill-pill">⚡ Skattkammar-näsa</span>
-                                <span class="skill-pill">⚡ Voguing i motvind</span>
-                                <span class="skill-pill">⚡ Oemotståndlig kvackning</span>
-                            </div>
-                        </div>
-
-                        <!-- 🎒 UTRUSTNING -->
-                        <div class="col-md-6">
-                            <h5 class="fw-bold text-danger border-bottom border-danger border-opacity-50 pb-2 mb-3">
-                                🎒 Utrustning (Fabulous Gear)
-                            </h5>
-                            <ul id="charGearList" class="list-unstyled mb-0">
-                                <li class="gear-item"><span>✨</span> <span>Glitterdränkt sjömansskjorta</span></li>
-                                <li class="gear-item"><span>✨</span> <span>Rosa fjäderboa med guldinfattning</span></li>
-                                <li class="gear-item"><span>✨</span> <span>Förstoringsglas med UV-ljus</span></li>
-                                <li class="gear-item"><span>✨</span> <span>Karta till Joakims skattkammare</span></li>
-                            </ul>
-                        </div>
-
-                    </div>
-
-                </div>
-            </div>
+        <script>
+            document.addEventListener("DOMContentLoaded", function(){
+                const el = document.getElementById("resultCard");
+                if(el){ el.scrollIntoView({behavior:'smooth', block:'start'}); if(typeof launchPastaConfetti==='function') launchPastaConfetti(); }
+            });
+        </script>
+    }
+    else
+    {
+        <!-- PLACEHOLDER NÄR INGET GENERERATS ÄN -->
+        <div class="text-center p-5 rounded-4 mb-5" style="background: rgba(255,255,255,0.06); border: 2px dashed rgba(255,215,0,0.4);">
+            <div class="display-1 mb-2">🃏</div>
+            <h4 class="fw-black" style="color:#ffd700;">La tua Chrillemon apparirà qui!</h4>
+            <p class="mb-0" style="color:#ffe8b3">Fyll i nome + descrizione ovan och tryck <strong>GENERA</strong> — AI:n målar ditt kort direkt! 🤌✨</p>
         </div>
-
-        <!-- BLADETS FOOTER -->
-        <div class="card-footer bg-transparent border-top border-secondary border-opacity-25 text-center py-3 text-muted small">
-            ✨ Rollspelskaraktärsskapare &bull; Powered by Azure AI & Edvin Törnblom Pride Energy &bull; Print-ready A4 🖨️
-        </div>
-    </div>
+    }
 
 </div>
 
-<!-- ⚙️ BACKEND-INTEGRATION: Om servern har skickat en karaktär renderas den direkt -->
-@if (serverChar != null)
-{
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            try {
-                const serverData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(serverChar));
-                if (serverData && typeof renderCharacterInDom === "function") {
-                    renderCharacterInDom(serverData);
-                    launchRainbowConfetti();
-                }
-            } catch (err) {
-                console.error("Kunde inte rendera serverdata:", err);
-            }
-        });
-    </script>
+@section Scripts {
+<script>
+    // Visa "bi pi di ba pi di bo" + snurrande pizza vid submit — LLM tar 10-20s
+    document.getElementById("chrillemonForm")?.addEventListener("submit", function(){
+        const btn = document.getElementById("generateBtn");
+        const t = document.getElementById("btnText");
+        const s = document.getElementById("btnSpinner");
+        const loader = document.getElementById("pizzaLoader");
+        if(btn){ btn.disabled = true; }
+        if(t){ t.innerHTML = '<span class="bipidi-btn">bi pi di ba pi di bo</span> <span class="pizza-btn-spin">🍕</span>'; }
+        if(s){ s.style.display = "none"; }
+        if(loader){ loader.style.display = "flex"; }
+        // Förhindra extra scroll medan overlay visas
+        document.body.style.overflow = "hidden";
+    });
+</script>
 }
