@@ -1,10 +1,225 @@
-﻿@page
+@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "SLAY & ROLLSPEL - Edvin Törnblom Pride Edition ✨🌈";
+
+    // Säker reflektion så att koden bygger oavsett hur gruppen namnger sin egenskap i IndexModel
+    dynamic? serverChar = null;
+    var charProp = Model.GetType().GetProperty("GeneratedCharacter") ?? Model.GetType().GetProperty("Character");
+    if (charProp != null)
+    {
+        serverChar = charProp.GetValue(Model);
+    }
+    if (serverChar == null && ViewData["Character"] != null)
+    {
+        serverChar = ViewData["Character"];
+    }
+
+    var errorMsgProp = Model.GetType().GetProperty("ErrorMessage");
+    string? errorMessage = errorMsgProp?.GetValue(Model) as string ?? ViewData["ErrorMessage"] as string;
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container py-4">
+
+    <!-- 🪩 TOPP-BAR: EDVIN TÖRNBLOM VIBE TICKER & LSD-LÄGE (Döljs vid utskrift) -->
+    <div class="no-print d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
+        <div class="edvin-ticker">
+            <span class="fs-5">💅</span>
+            <span id="edvinQuoteText">”MÄNNISKA, JAG DÖÖÖÖR FÖR DEN HÄR KARAKTÄREN!” ✨</span>
+        </div>
+
+        <div class="trip-toggle-bar">
+            <button type="button" class="btn btn-sm btn-outline-light rounded-pill px-3 shadow-sm" onclick="toggleLsdMode()">
+                <span id="lsdStatusBadge">🌈 Klicka för HYPER-LSD LÄGE 🦄</span>
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-warning rounded-pill px-3 shadow-sm ms-1" onclick="launchRainbowConfetti()">
+                🎉 Fyrverkeri & Konfetti!
+            </button>
+        </div>
+    </div>
+
+    <!-- 🌟 HUVUDRUBRIK (Döljs vid utskrift) -->
+    <div class="no-print text-center mb-4">
+        <h1 class="display-3 rainbow-headline mb-1">👑 SLAY & SKAPA KARAKTÄR 🦄</h1>
+        <p class="glow-subtext fw-semibold">
+            Världens fetaste rollspelsgenerator! Skriv din idé, få ut ett komplett, fabulöst karaktärsblad.
+        </p>
+    </div>
+
+    <!-- 🚨 FELMEDDELANDE OM DET FINNS -->
+    @if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <div class="alert alert-danger shadow border-0 rounded-4 no-print mb-4">
+            <strong>Hoppsan darling!</strong> @errorMessage
+        </div>
+    }
+
+    <!-- 📝 INMATNINGSRUTA / FORMULÄR (Döljs vid utskrift) -->
+    <div class="no-print pride-card p-4 mb-5">
+        <form method="post" id="characterForm">
+            <div class="mb-3">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <label for="userPromptInput" class="form-label fw-bold fs-5 text-light mb-0">
+                        ✨ Vad är din karaktärsvision, darling?
+                    </label>
+                    <span class="badge bg-warning text-dark px-2 py-1 rounded-pill">Ankeborg &bull; Fantasy &bull; Cyberpunk &bull; Pride</span>
+                </div>
+                <textarea id="userPromptInput" name="UserPrompt" class="form-control pride-textarea p-3" rows="3"
+                          placeholder="Exempel: Jag vill ha en äventyrlig och nyfiken anka som ofta hamnar i trubbel och gärna ger sig ut på skattjakter."></textarea>
+            </div>
+
+            <!-- FÖRSLAGS-PRESETS (High-energy Edvin & Duckburg vibes) -->
+            <div class="mb-4">
+                <div class="small text-uppercase fw-bold text-info mb-2">⚡ Snabb-inspo (klicka för att fylla i):</div>
+                <div class="d-flex flex-wrap gap-2">
+                    <button type="button" class="btn-preset" 
+                            onclick="setPreset('Jag vill ha en äventyrlig och nyfiken anka som ofta hamnar i trubbel och gärna ger sig ut på skattjakter.')">
+                        🦆 Äventyrlig anka (Uppgiften)
+                    </button>
+                    <button type="button" class="btn-preset" 
+                            onclick="setPreset('En glamourös glitter-anka från Ankeborg med fjäderboa och champagne som letar efter Joakim von Ankas hemliga diamant-diadem.')">
+                        💎 Glitter-Diva från Ankeborg
+                    </button>
+                    <button type="button" class="btn-preset" 
+                            onclick="setPreset('En bimbo-paladin med platina-peruk och enhörningsrustning som kastar glitter-smite och sprider villkorslös kärlek.')">
+                        🦄 Bimbo-Paladin & Enhörning
+                    </button>
+                    <button type="button" class="btn-preset" 
+                            onclick="setPreset('En techno-shaman med neon-tatueringar och platåstövlar som förvandlar all ondska till pulserande disco-bas.')">
+                        🪩 Techno-Shaman från Pride
+                    </button>
+                </div>
+            </div>
+
+            <!-- KNAPPAR FÖR ATT SKAPA / TESTA -->
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 pt-2 border-top border-secondary border-opacity-25">
+                <button type="button" class="btn btn-outline-info rounded-pill px-3 py-2 fw-semibold" onclick="triggerDemoCharacter()">
+                    🧪 Testa direkt i Frontend (Live-demo)
+                </button>
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn-slay fs-5" onclick="launchRainbowConfetti()">
+                        ✨ SLAY & SKAPA KARAKTÄR 🌈
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- =========================================================
+         KARAKTÄRSBLADET (CHARACTER SHEET) - VISAS PÅ SKÄRM & UTSKRIFT
+         ========================================================= -->
+    <div id="characterSheetSection" class="character-sheet card border-0 mb-5" style="display: @(serverChar != null ? "block" : "none");">
+        
+        <!-- HEADER PÅ BLADET -->
+        <div class="character-header d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <div>
+                <span class="small text-uppercase text-warning fw-bold d-block mb-1">OFFICIELLT KARAKTÄRSBLAD</span>
+                <h2 id="charNameDisplay" class="character-name mb-0">Kalle 'Disco-Fjäder' Anka</h2>
+                <div class="mt-2">
+                    <span id="charRoleDisplay" class="character-role-badge">Äventyrlig Skattjägar-Diva</span>
+                </div>
+            </div>
+
+            <!-- UTSKRIFTSKNAPP (Döljs i utskrift) -->
+            <div class="no-print">
+                <button type="button" class="btn btn-light rounded-pill px-4 py-2 fw-bold shadow-sm" onclick="window.print()">
+                    🖨️ Skriv ut / Spara PDF
+                </button>
+            </div>
+        </div>
+
+        <!-- INNEHÅLL I KARAKTÄRSBLADET -->
+        <div class="card-body p-4 p-md-5">
+            <div class="row g-4">
+
+                <!-- VÄNSTER KOLUMN: PORTRÄTT -->
+                <div class="col-lg-4 text-center">
+                    <div class="portrait-container mb-3">
+                        <img id="charPortraitImg" src="" alt="Karaktärsporträtt" class="portrait-img" style="display: none;" />
+                        <div id="charPortraitPlaceholder" class="portrait-placeholder">
+                            <div class="display-1 mb-2">🪩</div>
+                            <h5 class="fw-bold text-light mb-1">GLAMOUR-PORTRÄTT</h5>
+                            <p class="small text-muted mb-0">Konstverket genereras via Azure AI / DALL-E</p>
+                        </div>
+                    </div>
+                    <div class="no-print small text-muted fst-italic">
+                        Tips: Porträttet anpassas automatiskt för utskrift!
+                    </div>
+                </div>
+
+                <!-- HÖGER KOLUMN: HISTORIA, FÄRDIGHETER & UTRUSTNING -->
+                <div class="col-lg-8">
+                    
+                    <!-- 📜 BAKGRUNDSHISTORIA -->
+                    <div class="mb-4">
+                        <h4 class="fw-bold text-warning border-bottom border-warning border-opacity-50 pb-2 mb-3">
+                            📜 Bakgrundshistoria & Lore
+                        </h4>
+                        <div class="lore-box">
+                            <div class="lore-quote">”Det handlar inte bara om att överleva – det handlar om att göra entré!”</div>
+                            <p id="charLoreDisplay" style="white-space: pre-line;" class="mb-0">
+                                Kalle har tröttnat på att ständigt jaga 25 öre i timmen hos Farbror Joakim. Efter att ha ramlat in i en hemlig pop-up-klubb under Ankeborgs Pridefestival insåg han sitt sanna kall: Han är inte bara en sjöman – han är världens mest fabulösa äventyrare!
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- FÄRDIGHETER & UTRUSTNING SIDA VID SIDA -->
+                    <div class="row g-4">
+                        
+                        <!-- ⚡ FÄRDIGHETER (SKILLS) -->
+                        <div class="col-md-6">
+                            <h5 class="fw-bold text-info border-bottom border-info border-opacity-50 pb-2 mb-3">
+                                ⚡ Färdigheter & Vibe-Check
+                            </h5>
+                            <div id="charSkillsList" class="d-flex flex-wrap gap-2">
+                                <span class="skill-pill">⚡ Dramatisk Vrede</span>
+                                <span class="skill-pill">⚡ Skattkammar-näsa</span>
+                                <span class="skill-pill">⚡ Voguing i motvind</span>
+                                <span class="skill-pill">⚡ Oemotståndlig kvackning</span>
+                            </div>
+                        </div>
+
+                        <!-- 🎒 UTRUSTNING -->
+                        <div class="col-md-6">
+                            <h5 class="fw-bold text-danger border-bottom border-danger border-opacity-50 pb-2 mb-3">
+                                🎒 Utrustning (Fabulous Gear)
+                            </h5>
+                            <ul id="charGearList" class="list-unstyled mb-0">
+                                <li class="gear-item"><span>✨</span> <span>Glitterdränkt sjömansskjorta</span></li>
+                                <li class="gear-item"><span>✨</span> <span>Rosa fjäderboa med guldinfattning</span></li>
+                                <li class="gear-item"><span>✨</span> <span>Förstoringsglas med UV-ljus</span></li>
+                                <li class="gear-item"><span>✨</span> <span>Karta till Joakims skattkammare</span></li>
+                            </ul>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- BLADETS FOOTER -->
+        <div class="card-footer bg-transparent border-top border-secondary border-opacity-25 text-center py-3 text-muted small">
+            ✨ Rollspelskaraktärsskapare &bull; Powered by Azure AI & Edvin Törnblom Pride Energy &bull; Print-ready A4 🖨️
+        </div>
+    </div>
+
 </div>
+
+<!-- ⚙️ BACKEND-INTEGRATION: Om servern har skickat en karaktär renderas den direkt -->
+@if (serverChar != null)
+{
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            try {
+                const serverData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(serverChar));
+                if (serverData && typeof renderCharacterInDom === "function") {
+                    renderCharacterInDom(serverData);
+                    launchRainbowConfetti();
+                }
+            } catch (err) {
+                console.error("Kunde inte rendera serverdata:", err);
+            }
+        });
+    </script>
+}

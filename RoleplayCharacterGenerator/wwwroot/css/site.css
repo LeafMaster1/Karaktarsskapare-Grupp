@@ -1,31 +1,465 @@
-html {
-  font-size: 14px;
+/* =========================================================
+   EDVIN TÖRNBLOM ON LSD @ WORLD'S WILDEST PRIDE FESTIVAL ✨🌈🪩
+   ========================================================= */
+
+:root {
+    --pride-pink: #ff1493;
+    --pride-purple: #9400d3;
+    --pride-blue: #00f0ff;
+    --pride-green: #39ff14;
+    --pride-yellow: #fff700;
+    --pride-orange: #ff7700;
+    --pride-red: #ff0055;
+    --disco-silver: #f0f8ff;
 }
 
-@media (min-width: 768px) {
-  html {
+html {
     font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+    background: radial-gradient(circle at 10% 20%, #200030 0%, #10001e 40%, #080010 100%);
+    color: #ffffff;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    margin-bottom: 70px;
+    min-height: 100vh;
+    transition: background 1s ease;
+    overflow-x: hidden;
 }
 
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
+/* 🌈 TRIIPPY LSD ANIMATED BACKGROUND (När hyper-mode är på) */
+body.trippin {
+    background: linear-gradient(125deg, #ff007f, #7928ca, #0070f3, #00dfd8, #7928ca, #ff0080);
+    background-size: 400% 400%;
+    animation: lsdRainbowFlow 8s ease infinite;
 }
 
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-  text-align: start;
+@keyframes lsdRainbowFlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* NAVBAR GLAMOUR */
+.navbar {
+    background: rgba(22, 5, 36, 0.88) !important;
+    backdrop-filter: blur(16px);
+    border-bottom: 3px solid transparent !important;
+    border-image: linear-gradient(90deg, #ff007f, #ff7700, #ffee00, #00ff66, #00f0ff, #bb00ff) 1 !important;
+    box-shadow: 0 4px 25px rgba(255, 20, 147, 0.3);
+}
+
+.navbar-brand {
+    font-weight: 900 !important;
+    font-size: 1.4rem;
+    letter-spacing: 1px;
+    background: linear-gradient(90deg, #ff1493, #ffe600, #00f0ff, #ff007f);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: rainbowShift 4s ease infinite;
+}
+
+.nav-link {
+    color: #ffb6c1 !important;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.nav-link:hover {
+    color: #ffffff !important;
+    text-shadow: 0 0 10px #00f0ff, 0 0 20px #ff1493;
+    transform: translateY(-1px);
+}
+
+/* RAINBOW TYPOGRAPHY */
+.rainbow-headline {
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    background: linear-gradient(90deg, #ff007f, #ff7700, #ffee00, #39ff14, #00f0ff, #d900ff, #ff007f);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: rainbowShift 5s linear infinite;
+    text-shadow: 0 0 35px rgba(255, 20, 147, 0.6);
+}
+
+@keyframes rainbowShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.glow-subtext {
+    color: #e2c2ff;
+    font-size: 1.15rem;
+    text-shadow: 0 0 12px rgba(187, 0, 255, 0.5);
+}
+
+/* GLASSCARDS MED PRIDE-NEON */
+.pride-card {
+    background: rgba(30, 10, 48, 0.78);
+    backdrop-filter: blur(20px);
+    border: 2px solid rgba(255, 105, 180, 0.35);
+    border-radius: 26px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), 
+                0 0 25px rgba(255, 20, 147, 0.3),
+                inset 0 0 20px rgba(0, 240, 255, 0.1);
+    transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.pride-card:hover {
+    border-color: rgba(0, 240, 255, 0.7);
+    box-shadow: 0 15px 50px rgba(255, 20, 147, 0.45), 0 0 35px rgba(0, 240, 255, 0.4);
+}
+
+/* TEXTAREA MED NEON-GLOW */
+.pride-textarea {
+    background: rgba(15, 3, 26, 0.85) !important;
+    border: 2px solid #a855f7 !important;
+    color: #ffffff !important;
+    border-radius: 18px !important;
+    font-size: 1.05rem;
+    box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.5);
+    transition: all 0.3s ease;
+}
+
+.pride-textarea:focus {
+    border-color: #00f0ff !important;
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.6), inset 0 2px 10px rgba(0, 0, 0, 0.8) !important;
+    color: #fff !important;
+    background: rgba(20, 5, 35, 0.95) !important;
+}
+
+.pride-textarea::placeholder {
+    color: #9d80b8;
+    font-style: italic;
+}
+
+/* SLAY-KNAPPAR MED DISCO-PULSERING */
+.btn-slay {
+    background: linear-gradient(45deg, #ff007f, #ff7700, #ffee00, #00f0ff, #9400d3);
+    background-size: 300% 300%;
+    color: #ffffff !important;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: none;
+    border-radius: 50px;
+    padding: 12px 32px;
+    box-shadow: 0 0 25px rgba(255, 0, 127, 0.6), 0 4px 15px rgba(0, 0, 0, 0.4);
+    animation: rainbowShift 3s ease infinite;
+    transition: all 0.25s ease;
+    cursor: pointer;
+}
+
+.btn-slay:hover {
+    transform: scale(1.06) rotate(-1deg);
+    box-shadow: 0 0 35px rgba(0, 240, 255, 0.8), 0 0 50px rgba(255, 0, 127, 0.8);
+}
+
+.btn-slay:active {
+    transform: scale(0.97);
+}
+
+.btn-preset {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 105, 180, 0.4);
+    color: #f7d6ff;
+    border-radius: 30px;
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.btn-preset:hover {
+    background: rgba(255, 20, 147, 0.35);
+    border-color: #00f0ff;
+    color: #ffffff;
+    box-shadow: 0 0 15px rgba(255, 20, 147, 0.5);
+    transform: translateY(-2px);
+}
+
+/* EDVIN TÖRNBLOM VIBE TICKER */
+.edvin-ticker {
+    background: linear-gradient(90deg, #ff1493, #7928ca, #00f0ff);
+    color: #fff;
+    padding: 8px 15px;
+    border-radius: 50px;
+    font-size: 0.88rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 0 20px rgba(255, 20, 147, 0.5);
+    animation: pulseGlow 2s infinite alternate;
+}
+
+@keyframes pulseGlow {
+    from { box-shadow: 0 0 10px rgba(255, 20, 147, 0.4); }
+    to { box-shadow: 0 0 25px rgba(0, 240, 255, 0.7); }
+}
+
+/* =========================================================
+   KARAKTÄRSBLADET (CHARACTER SHEET) - FABULOUS EDITION ✨
+   ========================================================= */
+.character-sheet {
+    background: linear-gradient(135deg, rgba(35, 12, 55, 0.94) 0%, rgba(20, 5, 36, 0.96) 100%);
+    border: 3px solid;
+    border-image: linear-gradient(45deg, #ff007f, #ffee00, #00f0ff, #39ff14, #ff007f) 1;
+    border-radius: 28px !important;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8),
+                0 0 45px rgba(255, 20, 147, 0.4),
+                inset 0 0 30px rgba(148, 0, 211, 0.2);
+}
+
+.character-sheet::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 6px;
+    background: linear-gradient(90deg, #ff0055, #ff7700, #ffee00, #00ff66, #00f0ff, #bb00ff);
+    animation: rainbowShift 3s linear infinite;
+    background-size: 200% 200%;
+}
+
+.character-header {
+    background: rgba(20, 5, 30, 0.85);
+    border-bottom: 2px solid rgba(255, 20, 147, 0.3);
+    padding: 24px;
+}
+
+.character-name {
+    font-size: 2.5rem;
+    font-weight: 900;
+    letter-spacing: 1px;
+    color: #ffffff;
+    text-shadow: 0 0 15px #ff1493, 0 0 30px #9400d3;
+}
+
+.character-role-badge {
+    background: linear-gradient(45deg, #ff1493, #9400d3);
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: 800;
+    padding: 8px 20px;
+    border-radius: 50px;
+    box-shadow: 0 0 18px rgba(255, 20, 147, 0.6);
+    display: inline-block;
+}
+
+/* PORTRÄTTET */
+.portrait-container {
+    position: relative;
+    border-radius: 20px;
+    padding: 6px;
+    background: linear-gradient(135deg, #ff007f, #ffee00, #00f0ff, #9400d3);
+    background-size: 300% 300%;
+    animation: rainbowShift 4s ease infinite;
+    box-shadow: 0 0 25px rgba(0, 240, 255, 0.4);
+}
+
+.portrait-img {
+    width: 100%;
+    max-height: 320px;
+    object-fit: cover;
+    border-radius: 16px;
+    display: block;
+    background-color: #120320;
+}
+
+.portrait-placeholder {
+    width: 100%;
+    height: 280px;
+    border-radius: 16px;
+    background: radial-gradient(circle, #380d54 0%, #150024 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+    border: 2px dashed rgba(255, 255, 255, 0.2);
+}
+
+/* FÄRDIGHETER (SKILLS) & STATS */
+.skill-pill {
+    background: rgba(148, 0, 211, 0.25);
+    border: 1.5px solid #00f0ff;
+    color: #e6ffff;
+    padding: 8px 16px;
+    border-radius: 30px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 0 12px rgba(0, 240, 255, 0.25);
+    transition: all 0.2s ease;
+}
+
+.skill-pill:hover {
+    transform: scale(1.05);
+    background: rgba(0, 240, 255, 0.3);
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.6);
+}
+
+/* UTRUSTNINGSLISTA */
+.gear-item {
+    background: rgba(255, 255, 255, 0.05);
+    border-left: 4px solid #ff1493;
+    padding: 10px 16px;
+    margin-bottom: 8px;
+    border-radius: 6px 12px 12px 6px;
+    font-weight: 600;
+    color: #f7d6ff;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.2s ease;
+}
+
+.gear-item:hover {
+    background: rgba(255, 20, 147, 0.15);
+    transform: translateX(4px);
+    color: #ffffff;
+}
+
+/* BAKGRUNDSHISTORIA */
+.lore-box {
+    background: rgba(12, 2, 22, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 18px;
+    padding: 20px;
+    line-height: 1.8;
+    color: #f3e6ff;
+    font-size: 1.05rem;
+}
+
+.lore-quote {
+    font-style: italic;
+    color: #ffd700;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+/* FOOTER */
+footer {
+    background: rgba(15, 3, 25, 0.9) !important;
+    border-top: 1px solid rgba(255, 20, 147, 0.3) !important;
+    color: #c9a7e6 !important;
+}
+
+/* =========================================================
+   UTSKRIFTSLÄGE (PRINT & PDF FORMAT) 🖨️
+   Rensar all LSD/Neon-bakgrund så du får ett krispigt,
+   rent och elegant rollspelsark på A4!
+   ========================================================= */
+@media print {
+    body, html {
+        background: #ffffff !important;
+        color: #000000 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        font-size: 11pt !important;
+    }
+
+    header, 
+    footer, 
+    nav, 
+    .no-print, 
+    .btn, 
+    .trip-toggle-bar, 
+    .sparkle-particle {
+        display: none !important;
+    }
+
+    .container {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    .character-sheet {
+        background: #ffffff !important;
+        color: #000000 !important;
+        border: 2px solid #000000 !important;
+        box-shadow: none !important;
+        border-radius: 8px !important;
+        page-break-inside: avoid;
+    }
+
+    .character-sheet::before {
+        display: none !important;
+    }
+
+    .character-header {
+        background: #f0f0f0 !important;
+        border-bottom: 2px solid #000000 !important;
+        padding: 12px 18px !important;
+    }
+
+    .character-name {
+        color: #000000 !important;
+        text-shadow: none !important;
+        font-size: 1.8rem !important;
+    }
+
+    .character-role-badge {
+        background: #333333 !important;
+        color: #ffffff !important;
+        box-shadow: none !important;
+        font-size: 0.9rem !important;
+    }
+
+    .portrait-container {
+        background: none !important;
+        border: 1px solid #666666 !important;
+        box-shadow: none !important;
+        padding: 4px !important;
+    }
+
+    .portrait-img {
+        max-height: 200px !important;
+    }
+
+    .lore-box {
+        background: #fafafa !important;
+        color: #111111 !important;
+        border: 1px solid #cccccc !important;
+        font-size: 10pt !important;
+        line-height: 1.5 !important;
+        padding: 12px !important;
+    }
+
+    .lore-quote {
+        color: #444444 !important;
+    }
+
+    .skill-pill {
+        background: #ffffff !important;
+        border: 1px solid #333333 !important;
+        color: #000000 !important;
+        box-shadow: none !important;
+        font-size: 8.5pt !important;
+        padding: 4px 10px !important;
+    }
+
+    .gear-item {
+        background: #ffffff !important;
+        border-left: 3px solid #000000 !important;
+        color: #000000 !important;
+        margin-bottom: 4px !important;
+        padding: 4px 8px !important;
+        font-size: 9pt !important;
+    }
 }
